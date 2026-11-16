@@ -1,0 +1,232 @@
+
+##############################################################################
+  TEXT CLASSIFICATION COMPARATIVE STUDY — 20 NEWSGROUPS
+##############################################################################
+
+Execution started at: 2026-11-16 09:25:11
+Output directory    : C:\Users\munna\OneDrive\Desktop\Algorithms of IR\outputs
+
+==============================================================================
+  [Phase 1] Loading 20 Newsgroups Dataset
+==============================================================================
+
+Target categories (5):
+  - sci.med
+  - sci.space
+  - rec.sport.baseball
+  - talk.politics.mideast
+  - comp.graphics
+
+Fetching data from scikit-learn...
+
+Successfully loaded 4,884 total documents.
+
+Document count per class:
+  * comp.graphics           :  973 docs ( 19.9%)
+  * rec.sport.baseball      :  994 docs ( 20.4%)
+  * sci.med                 :  990 docs ( 20.3%)
+  * sci.space               :  987 docs ( 20.2%)
+  * talk.politics.mideast   :  940 docs ( 19.2%)
+
+Sample Document Preview (Document #0):
+Category: rec.sport.baseball
+------------------------------------------------------------
+From: king@cogsci.ucsd.edu (Jonathan King)
+Subject: Re: Binaca Blast Deep Drive Derby (BBDDD) Returns
+Article-I.D.: network.1psmbr$qi
+Distribution: na
+Organization: University of California, San Diego
+Lines: 40
+NNTP-Posting-Host: cogsci.ucsd.edu
+
+The Engimatic Vincent Gray writes:
+>king@cogsci.ucsd.edu (Jonathan King) writes:
+... [truncated] ...
+------------------------------------------------------------
+
+==============================================================================
+  [Phase 2] Preprocessing & TF-IDF Vectorization
+==============================================================================
+
+Split configuration: 80% Train / 20% Test (Stratified)
+  - Training documents: 3,907
+  - Testing documents:  977
+
+Vectorizing with TF-IDF (max_features=10,000, stop_words='english', sublinear_tf=True)...
+Feature matrix confirmed dimensions:
+  - X_train shape : (3907, 10000)
+  - X_test shape  : (977, 10000)
+  - Vocabulary size: 10,000 tokens
+
+==============================================================================
+  [Phase 3 & 4] Model Training, Prediction & Evaluation
+==============================================================================
+
+--> Training and evaluating: Decision Tree...
+--> Training and evaluating: K-Nearest Neighbors...
+--> Training and evaluating: Support Vector Machine...
+--> Training and evaluating: Naïve Bayes...
+
+Detailed Per-Class Classification Reports:
+
+--- Decision Tree ---
+                       precision    recall  f1-score   support
+
+        comp.graphics     0.7788    0.8308    0.8040       195
+   rec.sport.baseball     0.8796    0.8442    0.8615       199
+              sci.med     0.8350    0.8434    0.8392       198
+            sci.space     0.8854    0.8629    0.8740       197
+talk.politics.mideast     0.9140    0.9043    0.9091       188
+
+             accuracy                         0.8567       977
+            macro avg     0.8586    0.8571    0.8576       977
+         weighted avg     0.8582    0.8567    0.8572       977
+
+
+--- K-Nearest Neighbors ---
+                       precision    recall  f1-score   support
+
+        comp.graphics     0.8626    0.9333    0.8966       195
+   rec.sport.baseball     0.9257    0.9397    0.9327       199
+              sci.med     0.9613    0.8788    0.9182       198
+            sci.space     0.9637    0.9442    0.9538       197
+talk.politics.mideast     0.9684    0.9787    0.9735       188
+
+             accuracy                         0.9345       977
+            macro avg     0.9364    0.9349    0.9350       977
+         weighted avg     0.9362    0.9345    0.9347       977
+
+
+--- Support Vector Machine ---
+                       precision    recall  f1-score   support
+
+        comp.graphics     0.9363    0.9795    0.9574       195
+   rec.sport.baseball     0.9801    0.9899    0.9850       199
+              sci.med     0.9795    0.9646    0.9720       198
+            sci.space     0.9895    0.9594    0.9742       197
+talk.politics.mideast     1.0000    0.9894    0.9947       188
+
+             accuracy                         0.9765       977
+            macro avg     0.9771    0.9766    0.9767       977
+         weighted avg     0.9770    0.9765    0.9765       977
+
+
+--- Naïve Bayes ---
+                       precision    recall  f1-score   support
+
+        comp.graphics     0.8977    0.9897    0.9415       195
+   rec.sport.baseball     0.9848    0.9799    0.9824       199
+              sci.med     0.9840    0.9343    0.9585       198
+            sci.space     0.9895    0.9543    0.9716       197
+talk.politics.mideast     0.9946    0.9840    0.9893       188
+
+             accuracy                         0.9683       977
+            macro avg     0.9701    0.9685    0.9687       977
+         weighted avg     0.9701    0.9683    0.9685       977
+
+
+==============================================================================
+  [Phase 5] Comparative Results Table
+==============================================================================
+
+                 Model Accuracy Precision (Macro) Recall (Macro) F1-Score (Macro)  Train Time (s)  Predict Time (s)
+         Decision Tree   0.8567            0.8586         0.8571           0.8576           1.075             0.001
+   K-Nearest Neighbors   0.9345            0.9364         0.9349           0.9350           0.004             0.124
+Support Vector Machine   0.9765            0.9771         0.9766           0.9767           9.117             1.860
+           Naïve Bayes   0.9683            0.9701         0.9685           0.9687           0.005             0.001
+Saved comparative bar chart -> outputs\comparative_table.png
+Saved confusion matrices -> outputs\confusion_matrices.png
+
+==============================================================================
+  [Phase 6] Best Model Verdict & Diagnostic Insights
+==============================================================================
+
+VERDICT: Top Performing Model is >>> Support Vector Machine <<<
+  - Macro F1-Score : 0.9767
+  - Overall Accuracy: 0.9765 (97.65%)
+  - Training Time   : 9.117 s
+  - Prediction Time : 1.860 s
+
+Architectural & Algorithmic Observations:
+  1. Support Vector Machine (Linear SVM):
+     - Typically achieves superior precision and recall in high-dimensional text spaces.
+     - The linear hyperplane effectively separates sparse TF-IDF vectors where data points
+       are naturally linearly separable due to high dimensionality.
+  2. Multinomial Naïve Bayes:
+     - Delivers near-peak performance with near-zero training latency.
+     - Extremely resilient to irrelevant vocabulary features due to Laplace smoothing.
+  3. Decision Tree:
+     - Suffers from greedy orthogonal splits on sparse feature representations.
+     - Highly prone to variance and overfitting without depth constraints or ensemble averaging.
+  4. K-Nearest Neighbors (KNN):
+     - Severely affected by the 'Curse of Dimensionality' in 10,000-dimensional TF-IDF space,
+       where Euclidean/Minkowski distances between sparse vectors concentrate into uniform distances.
+
+Category Confusion Diagnostics:
+  - Decision Tree           : Total test errors = 140 / 977 docs
+  - K-Nearest Neighbors     : Total test errors =  64 / 977 docs
+  - Support Vector Machine  : Total test errors =  23 / 977 docs
+  - Naïve Bayes             : Total test errors =  31 / 977 docs
+
+==============================================================================
+  [Phase 7] What-If Experiment: Sensitivity to TF-IDF max_features
+==============================================================================
+
+Testing vocabulary size levels: [500, 1000, 2500, 5000, 10000, 20000]
+
+[Experiment] Evaluating max_features = 500...
+   Decision Tree            -> Macro F1 = 0.8231
+   K-Nearest Neighbors      -> Macro F1 = 0.8874
+   Support Vector Machine   -> Macro F1 = 0.9151
+   Naïve Bayes              -> Macro F1 = 0.8993
+
+[Experiment] Evaluating max_features = 1,000...
+   Decision Tree            -> Macro F1 = 0.8352
+   K-Nearest Neighbors      -> Macro F1 = 0.9098
+   Support Vector Machine   -> Macro F1 = 0.9403
+   Naïve Bayes              -> Macro F1 = 0.9214
+
+[Experiment] Evaluating max_features = 2,500...
+   Decision Tree            -> Macro F1 = 0.8605
+   K-Nearest Neighbors      -> Macro F1 = 0.9211
+   Support Vector Machine   -> Macro F1 = 0.9696
+   Naïve Bayes              -> Macro F1 = 0.9503
+
+[Experiment] Evaluating max_features = 5,000...
+   Decision Tree            -> Macro F1 = 0.8570
+   K-Nearest Neighbors      -> Macro F1 = 0.9280
+   Support Vector Machine   -> Macro F1 = 0.9757
+   Naïve Bayes              -> Macro F1 = 0.9646
+
+[Experiment] Evaluating max_features = 10,000...
+   Decision Tree            -> Macro F1 = 0.8576
+   K-Nearest Neighbors      -> Macro F1 = 0.9350
+   Support Vector Machine   -> Macro F1 = 0.9767
+   Naïve Bayes              -> Macro F1 = 0.9687
+
+[Experiment] Evaluating max_features = 20,000...
+   Decision Tree            -> Macro F1 = 0.8889
+   K-Nearest Neighbors      -> Macro F1 = 0.9348
+   Support Vector Machine   -> Macro F1 = 0.9766
+   Naïve Bayes              -> Macro F1 = 0.9696
+
+What-If Experiment Summary Table (Macro F1 vs. max_features):
+ max_features Decision Tree K-Nearest Neighbors Support Vector Machine Naïve Bayes
+          500        0.8231              0.8874                 0.9151      0.8993
+         1000        0.8352              0.9098                 0.9403      0.9214
+         2500        0.8605              0.9211                 0.9696      0.9503
+         5000        0.8570              0.9280                 0.9757      0.9646
+        10000        0.8576              0.9350                 0.9767      0.9687
+        20000        0.8889              0.9348                 0.9766      0.9696
+
+Saved what-if sensitivity chart -> outputs\what_if_experiment.png
+
+##############################################################################
+  STUDY EXECUTION COMPLETED in 118.68 seconds
+##############################################################################
+
+Generated Artifacts:
+  [1] Results Summary Log   : outputs\results_summary.txt
+  [2] Comparative Bar Chart : outputs\comparative_table.png
+  [3] Confusion Matrices    : outputs\confusion_matrices.png
+  [4] What-If Experiment    : outputs\what_if_experiment.png
